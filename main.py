@@ -3,7 +3,11 @@ import sys
 import json
 import time
 
-bingMapsKey = ""
+bingMapsKey = "Aptizt9a9YewutLyuOlZwxgKsBlE1cl4W7bqyTKpPcRfOH0BcB_zFnlEYXtlus4q"
+
+if not bingMapsKey or bingMapsKey == "":
+    print("Token não foi inserido corretamente!")
+    sys.exit()
 
 def name():
     nome = input("Digite seu nome: ")
@@ -25,12 +29,18 @@ def ponto_final():
 
 destination = ponto_final()
 
-if not bingMapsKey or bingMapsKey == "":
-    print("Token não foi inserido corretamente!")
-    sys.exit()
+route = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=" + origin + "&wp.1=" + destination + "/&key=" + bingMapsKey
 
-route = "http://dev.virutalearth.net/REST/V1/Routes/Driving?wp.0=" + origin + "&wp.1=" + destination + "/&key=" + bingMapsKey
-print("Printando rota... \n")
-time.sleep(3)
+print("Printando rota...\n")
 print(route)
 
+r = requests.get(url = route)
+result = r.json()
+
+print (result)
+
+distance = result["resourceSets"][0]["resources"][0]["travelDistance"]
+duration = result["resourceSets"][0]["resources"][0]["travelDuration"]
+
+print(f"A distância é de: {distance}km\n")
+print(f"O tempo entre a partida e o destinatário é de: {duration}")
