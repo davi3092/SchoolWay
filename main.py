@@ -10,37 +10,70 @@ if not bingMapsKey or bingMapsKey == "":
     sys.exit()
 
 def name():
-    nome = input("Digite seu nome: ")
-    return nome
+    motorista = input("Digite seu nome: ")
+    return motorista
 
-def quantidade_de_alunos():
-    numero_de_alunos = int(input("Digite a quantidade de alunos que você tem: "))
+nome = name()
+
+def quantidade_de_alunos(nome):
+    numero_de_alunos = int(input(f"Certo {nome}, digite a quantidade de alunos que você tem: "))
     return numero_de_alunos
 
+numero = quantidade_de_alunos(nome)
+
 def ponto_inicial():
-    origem = input("Digite o ponto inicial: ")
+    origem = input("Digite o endereço da partida: ")
     return origem
 
 origin = ponto_inicial()
 
 def ponto_final():
-    destinatario = input("Digite o ponto final: ")
+    destinatario = input("Digite o endereço da escola: ")
     return destinatario
 
-destination = ponto_final()
+destinatario = ponto_final()
+
+enderecos = []
+count = 1
+
+lista_km = []
+
+for i in range (numero):
+    endereco_aluno = input(f"Digite o endereço {count}: ")
+    enderecos.append(endereco_aluno)
+    count += 1
+
+for i in enderecos:
+    destination = i 
+
+    route = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=" + origin + "&wp.1=" + destination + "/&key=" + bingMapsKey
+
+    print(route)
+
+    r = requests.get(url = route)
+    result = r.json()
+
+    distance = result["resourceSets"][0]["resources"][0]["travelDistance"]
+
+    print(distance)
+
+    lista_km.append(distance)
+
+lista_km.sort
+print(f'A sua rota é a seguinte: {lista_km}')
+lista_km.sort(reverse=True)
+
+origin = enderecos[0]
+
+destination = destinatario
 
 route = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=" + origin + "&wp.1=" + destination + "/&key=" + bingMapsKey
 
-print("Printando rota...\n")
 print(route)
 
 r = requests.get(url = route)
 result = r.json()
 
-print (result)
-
 distance = result["resourceSets"][0]["resources"][0]["travelDistance"]
-duration = result["resourceSets"][0]["resources"][0]["travelDuration"]
 
-print(f"A distância é de: {distance}km\n")
-print(f"O tempo entre a partida e o destinatário é de: {duration}")
+print(f"A distância do último endereço é: {distance}")
