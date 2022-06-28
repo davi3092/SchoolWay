@@ -37,10 +37,15 @@ print(route)
 r = requests.get(url = route)
 result = r.json()
 
-print (result)
-
 distance = result["resourceSets"][0]["resources"][0]["travelDistance"]
 duration = result["resourceSets"][0]["resources"][0]["travelDuration"]
 
-print(f"A distância é de: {distance}km\n")
-print(f"O tempo entre a partida e o destinatário é de: {duration}")
+print(f"\nA distância é de: {distance} km\n")
+
+duration = duration / 60
+
+if duration > 100:
+    duration = duration / 60
+    print(f"O tempo entre a partida e o destinatário é de: {duration:.0f} horas")
+else:
+    print(f"O tempo entre a partida e o destinatário é de: {duration:.2f} minutos")
